@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Persamaan Lingkaran</title>
+    <!-- Combine Outfit (Bold Header) & Patrick Hand (Handwritten Body) -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700;900&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* --- HYBRID PALETTE --- */
+            --bg-paper: #fffdf7;      
+            --grid-line: #cbd5e1;     
+            
+            --ink-black: #000000;     
+            
+            /* Pop Colors */
+            --pop-purple: #c084fc;
+            --pop-pink: #f472b6;
+            --pop-cyan: #22d3ee;
+            --pop-yellow: #facc15;
+            --pop-green: #4ade80;
+            
+            /* 3D Elements */
+            --border-thick: 3px solid var(--ink-black);
+            
+            /* Bayangan 3D yang lebih dalam */
+            --shadow-3d: 6px 6px 0px var(--ink-black);
+            --shadow-3d-hover: 10px 10px 0px var(--ink-black);
+            --shadow-3d-active: 0px 0px 0px var(--ink-black); /* Hilang pas ditekan */
+            
+            --radius-box: 16px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.2rem;
+            background-color: var(--bg-paper);
+            color: var(--ink-black);
+            /* Pola Kertas Grid */
+            background-image: 
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 25px 25px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            padding: 15px;
+        }
+
+        /* --- HEADER 3D --- */
+        header {
+            background: #ffffff;
+            border: var(--border-thick);
+            padding: 2rem 1rem;
+            text-align: center;
+            margin-bottom: 40px;
+            /* Efek Timbul Header */
+            box-shadow: var(--shadow-3d);
+            border-radius: var(--radius-box);
+            position: relative;
+            z-index: 10;
+            transform: translate(-3px, -3px); /* Sedikit naik biar bayangan kelihatan */
+            transition: transform 0.3s;
+        }
+        
+        header:hover {
+             transform: translate(-5px, -5px);
+             box-shadow: var(--shadow-3d-hover);
+        }
+
+        header h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            -webkit-text-stroke: 2px black;
+            color: var(--pop-purple);
+            /* Teks 3D Bertumpuk */
+            text-shadow: 
+                3px 3px 0px #000,
+                6px 6px 0px rgba(0,0,0,0.2);
+        }
+
+        header p { 
+            font-size: 1.3rem; 
+            font-weight: 700; 
+            background: var(--pop-yellow);
+            display: inline-block;
+            padding: 8px 25px;
+            border: 3px solid black;
+            border-radius: 50px;
+            /* Chip 3D */
+            box-shadow: 4px 4px 0 rgba(0,0,0,1);
+            transform: rotate(-2deg);
+        }
+
+        /* --- CONTAINER --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto 40px;
+            padding: 0 10px;
+            width: 100%;
+        }
+
+        /* --- TABS (Tombol 3D Chunky) --- */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 50px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 15px 20px;
+            background: #fff;
+            border: var(--border-thick);
+            border-radius: 18px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--ink-black);
+            cursor: pointer;
+            min-width: 140px;
+            text-transform: uppercase;
+            
+            /* Efek Tombol 3D */
+            box-shadow: var(--shadow-3d);
+            transform: translate(0, 0);
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            top: 0;
+        }
+
+        /* Warna-warni tiap tab */
+        .tab-btn:nth-child(1) { background: #e0f2fe; }
+        .tab-btn:nth-child(2) { background: #fce7f3; }
+        .tab-btn:nth-child(3) { background: #dcfce7; }
+
+        .tab-btn:hover {
+            transform: translate(-2px, -4px);
+            box-shadow: 8px 10px 0px var(--ink-black);
+        }
+
+        /* Efek Tekan (Penyet) */
+        .tab-btn:active, .tab-btn.active {
+            background: var(--ink-black);
+            color: white;
+            transform: translate(6px, 6px);
+            box-shadow: var(--shadow-3d-active);
+            border-color: var(--ink-black);
+        }
+        
+        .tab-btn.active:hover {
+             transform: translate(6px, 6px); /* Stay pressed */
+        }
+
+        /* --- SECTIONS --- */
+        .content-section {
+            display: none;
+            animation: popUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .content-section.active { display: block; }
+
+        @keyframes popUp {
+            0% { transform: scale(0.9) translateY(50px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        /* --- GRID LAYOUT --- */
+        .grid-sim {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* --- CARD (3D Block Style) --- */
+        .card {
+            background: #ffffff;
+            border: var(--border-thick);
+            padding: 30px;
+            border-radius: var(--radius-box);
+            /* Efek Kotak 3D */
+            box-shadow: var(--shadow-3d);
+            margin-bottom: 30px;
+            position: relative;
+            transition: transform 0.2s;
+        }
+        
+        .card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 10px 10px 0px var(--ink-black);
+        }
+
+        /* Hiasan "Paku" di sudut */
+        .card::before, .card::after {
+            content: ''; position: absolute; width: 10px; height: 10px;
+            border-radius: 50%; background: #ccc; border: 2px solid black;
+        }
+        .card::before { top: 10px; left: 10px; }
+        .card::after { top: 10px; right: 10px; }
+
+        .card-header {
+            border-bottom: 4px dashed var(--ink-black);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .card h2 {
+            font-family: 'Outfit', sans-serif;
+            color: var(--ink-black);
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin: 0;
+            background: var(--pop-cyan);
+            display: inline-block;
+            padding: 5px 15px;
+            transform: rotate(-1deg);
+            border: 3px solid black;
+            box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
+        }
+
+        /* --- DEFINITION CARDS (Sticker 3D) --- */
+        .def-card {
+            background: #fff;
+            border: 3px solid #000;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 4px 4px 0 #000;
+            transition: transform 0.2s;
+            cursor: default;
+        }
+        .def-card:hover { transform: scale(1.05) rotate(2deg); z-index: 2; }
+        
+        .icon-badge {
+            width: 45px; height: 45px;
+            border: 3px solid #000;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 900;
+            font-size: 1.1rem;
+            box-shadow: inset 2px 2px 0 rgba(255,255,255,0.5);
+        }
+        .def-text { font-weight: 700; font-size: 1.2rem; }
+
+        /* --- INPUTS --- */
+        .control-panel { display: flex; flex-direction: column; gap: 20px; }
+
+        .input-group label {
+            display: block; font-size: 1.2rem; font-weight: 700;
+            margin-bottom: 8px; font-family: 'Outfit', sans-serif;
+        }
+
+        .input-wrapper {
+            position: relative; display: flex; align-items: center;
+            border: 3px solid #000; border-radius: 12px;
+            background: #fff; box-shadow: 4px 4px 0 rgba(0,0,0,0.1);
+        }
+
+        .input-wrapper span {
+            padding: 12px 18px; font-weight: 700; background: #eee;
+            border-right: 3px solid #000; border-radius: 9px 0 0 9px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .input-wrapper input {
+            width: 100%; padding: 12px; border: none; background: transparent;
+            font-family: 'Patrick Hand', cursive; font-size: 1.5rem; font-weight: bold;
+        }
+
+        /* --- SLIDER 3D --- */
+        .zoom-control {
+            background: var(--pop-yellow); padding: 15px;
+            border: 3px solid #000; border-radius: 15px;
+            box-shadow: 5px 5px 0 #000;
+        }
+        
+        input[type=range] {
+            width: 100%; cursor: pointer; accent-color: #000;
+            height: 8px; border-radius: 5px; border: 1px solid black;
+        }
+
+        /* --- RESULT BOX --- */
+        .result-container {
+            margin-top: 20px; display: flex; flex-direction: column; gap: 20px;
+        }
+
+        .result-box {
+            background: #fff; padding: 20px; border: 3px solid #000;
+            border-radius: 15px; box-shadow: 6px 6px 0 var(--pop-cyan);
+            position: relative;
+        }
+        
+        .result-label {
+            font-size: 1rem; font-family: 'Outfit', sans-serif; font-weight: 900;
+            background: #000; color: #fff; padding: 4px 10px; display: inline-block;
+            margin-bottom: 10px; transform: rotate(-1deg);
+            position: absolute; top: -10px; left: 10px;
+        }
+
+        .equation {
+            font-size: 1.6rem; font-weight: 700; word-break: break-all; margin-top: 10px;
+        }
+
+        .stats-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;
+        }
+        
+        .stat-item {
+            background: #fff; padding: 10px; border: 2px dashed #000; font-size: 1.1rem;
+        }
+
+        /* --- CANVAS --- */
+        .canvas-wrapper {
+            background: #ffffff; padding: 15px; display: flex;
+            justify-content: center; align-items: center; position: relative;
+            overflow: hidden; height: 550px; border: var(--border-thick);
+            border-radius: var(--radius-box); box-shadow: var(--shadow-3d);
+            /* Pola titik grid halus */
+            background-image: radial-gradient(#ccc 1.5px, transparent 1.5px);
+            background-size: 20px 20px;
+        }
+
+        canvas { display: block; cursor: crosshair; }
+        
+        .canvas-legend {
+            position: absolute; top: 20px; right: 20px; background: #fff;
+            padding: 12px; border: 3px solid #000; box-shadow: 4px 4px 0 #000;
+            font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: bold;
+        }
+        
+        .legend-item { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
+        .dot { width: 15px; height: 15px; border: 2px solid black; border-radius: 50%; }
+
+        /* Tombol Reset 3D */
+        .btn-reset {
+            width: 100%; margin-top: 20px; padding: 15px; background: #fff;
+            border: 3px solid var(--ink-black); color: var(--ink-black);
+            font-family: 'Outfit', sans-serif; font-weight: 900;
+            text-transform: uppercase; cursor: pointer; border-radius: 12px;
+            /* 3D Action */
+            box-shadow: 5px 5px 0 #000;
+            transform: translate(0,0);
+            transition: 0.1s;
+        }
+        
+        .btn-reset:hover { background: #ffcccc; transform: translate(-2px, -2px); box-shadow: 7px 7px 0 #000; }
+        .btn-reset:active { transform: translate(5px, 5px); box-shadow: 0 0 0; }
+
+        /* --- CONTOH SOAL --- */
+        .quiz-intro { text-align: center; margin-bottom: 40px; }
+        .quiz-intro h2 { 
+            font-family: 'Outfit', sans-serif; font-size: 2.5rem; font-weight: 900;
+            color: var(--ink-black); text-shadow: 4px 4px 0 var(--pop-cyan);
+        }
+        
+        .examples-container {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-bottom: 50px;
+        }
+
+        .example-card {
+            flex: 1 1 300px; background: #fff; border: var(--border-thick);
+            padding: 25px; border-radius: 16px;
+            /* 3D Static Shadow */
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.15);
+            transition: transform 0.3s;
+        }
+        .example-card:hover { transform: translate(-5px, -5px); box-shadow: 13px 13px 0 #000; z-index: 5; }
+        
+        .example-card h3 { 
+            background: var(--pop-pink); color: white; display: inline-block; padding: 6px 12px;
+            margin-bottom: 15px; border: 3px solid black; transform: rotate(-2deg);
+            font-family: 'Outfit', sans-serif; box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+        }
+        .example-step { 
+            margin-top: 15px; padding: 15px; background: #f0fdfa; 
+            border: 2px dashed var(--pop-green); font-weight: bold; border-radius: 10px;
+        }
+
+        /* Slider */
+        .slider-wrapper { position: relative; width: 100%; display: flex; align-items: center; }
+        .nav-btn {
+            background: #fff; color: #000; width: 60px; height: 60px; 
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+            border: 3px solid #000; border-radius: 50%; z-index: 5; font-size: 1.8rem;
+            box-shadow: 5px 5px 0 #000; transition: 0.1s;
+        }
+        .nav-btn:hover { background: var(--pop-yellow); transform: translate(-2px, -2px); box-shadow: 7px 7px 0 #000; }
+        .nav-btn:active { transform: translate(5px, 5px); box-shadow: 0 0 0; }
+        .nav-btn.prev { margin-right: 20px; }
+        .nav-btn.next { margin-left: 20px; }
+
+        .quiz-track { display: flex; gap: 25px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 20px 10px 40px 10px; scroll-behavior: smooth; width: 100%; scrollbar-width: none; }
+        .quiz-track::-webkit-scrollbar { display: none; }
+
+        /* KARTU SOAL COMIC 3D */
+        .quiz-card {
+            min-width: 340px; max-width: 340px; background: #fff;
+            border: var(--border-thick); padding: 30px; border-radius: 20px;
+            display: flex; flex-direction: column; justify-content: space-between;
+            scroll-snap-align: center; 
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+        .quiz-card:hover { transform: translateY(-5px); box-shadow: 8px 13px 0 rgba(0,0,0,1); }
+
+        .question-badge { 
+            background: var(--pop-cyan); color: #000; padding: 6px 18px; 
+            display: inline-block; margin-bottom: 20px; border: 3px solid black; 
+            font-family: 'Outfit', sans-serif; font-weight: 800; transform: rotate(-2deg);
+            box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+        }
+        .question-text { font-size: 1.3rem; margin-bottom: 25px; }
+
+        .btn-toggle-answer { 
+            width: 100%; background: #fff; border: 3px solid #000; color: #000; 
+            padding: 15px; font-family: 'Outfit', sans-serif; font-weight: 800; 
+            cursor: pointer; box-shadow: 5px 5px 0 #000; transition: 0.1s; border-radius: 12px;
+        }
+        .btn-toggle-answer:hover { background: var(--pop-purple); color: white; transform: translate(-2px,-2px); box-shadow: 7px 7px 0 #000; }
+        .btn-toggle-answer:active { transform: translate(5px,5px); box-shadow: 0 0 0 #000; }
+
+        /* Kuis Pilihan Ganda */
+        .quiz-container-wrapper { max-width: 800px; margin: 0 auto; }
+        .score-board { 
+            background: #fff; border: var(--border-thick); padding: 40px; 
+            text-align: center; margin-bottom: 30px; display: none; 
+            box-shadow: 10px 10px 0 #000; border-radius: 20px;
+        }
+        .score-value { font-family: 'Outfit', sans-serif; font-size: 5rem; color: var(--pop-purple); margin: 15px 0; -webkit-text-stroke: 3px black; text-shadow: 6px 6px 0 #000; }
+        
+        .quiz-item-card { 
+            background: #fff; border: 3px solid #000; padding: 25px; margin-bottom: 20px; 
+            box-shadow: 5px 5px 0 #ccc; border-radius: 16px;
+        }
+        .quiz-item-card.correct { border-color: #000; background: #dcfce7; box-shadow: 5px 5px 0 #22c55e; }
+        .quiz-item-card.wrong { border-color: #000; background: #fee2e2; box-shadow: 5px 5px 0 #ef4444; }
+        
+        .option-label { 
+            display: flex; align-items: center; padding: 15px; border: 2px solid #eee; 
+            margin-bottom: 10px; cursor: pointer; border-radius: 12px; transition: 0.2s;
+        }
+        .option-label:hover { border-color: #000; background: #f0f9ff; transform: translateX(5px); box-shadow: -5px 0 0 var(--pop-cyan); }
+        .option-label input { margin-right: 15px; width: 22px; height: 22px; accent-color: var(--pop-purple); }
+        
+        .option-label.correct-answer { background: #bbf7d0; border: 3px solid #000; font-weight: bold; }
+        .option-label.wrong-answer { background: #fecaca; border: 3px solid #000; text-decoration: line-through; }
+
+        .btn-submit-quiz { 
+            background: var(--pop-green); color: #000; width: 100%; padding: 20px; 
+            border: 3px solid #000; font-family: 'Outfit', sans-serif; font-size: 1.5rem; 
+            font-weight: 900; cursor: pointer; box-shadow: 6px 6px 0 #000; transition: all 0.1s; margin-top: 30px; border-radius: 20px;
+        }
+        .btn-submit-quiz:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 #000; }
+        .btn-submit-quiz:active { transform: translate(6px, 6px); box-shadow: 0 0 0 #000; }
+
+        /* --- MODAL POPUP --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0, 0.7); display: none; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(5px); }
+        .modal-content { background: #fff; padding: 0; width: 90%; max-width: 600px; box-shadow: 15px 15px 0 #000; border: 4px solid #000; position: relative; animation: bounceIn 0.3s; border-radius: 20px; overflow: hidden; }
+        .modal-header { background: var(--pop-cyan); padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid #000; }
+        .modal-header h3 { margin: 0; font-size: 2rem; font-family:'Outfit'; font-weight:900; text-transform:uppercase; text-shadow: 3px 3px 0 rgba(255,255,255,0.5); }
+        .close-btn { font-size: 2rem; cursor: pointer; color: #000; font-weight: bold; width: 50px; height: 50px; border: 3px solid black; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: white; box-shadow: 3px 3px 0 #000; transition: 0.1s; }
+        .close-btn:hover { background: #ffcccc; transform: translate(-2px,-2px); box-shadow: 5px 5px 0 #000; }
+        .close-btn:active { transform: translate(3px,3px); box-shadow: 0 0 0; }
+        .modal-body { padding: 30px; font-size: 1.3rem; line-height: 1.6; }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            60% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 900px) { .grid-sim { grid-template-columns: 1fr; } }
+        @media (max-width: 600px) { header h1 { font-size: 2.2rem; } .quiz-card { min-width: 85vw; max-width: 85vw; } .nav-btn { display: none; } .canvas-wrapper { height: 350px; } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Persamaan<span style="color:var(--pop-pink)"> Lingkaran</span></h1>
+        <p>Dengan P (a,b) dan Jari-jari r</p>
+    </header>
+
+    <div class="container">
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('simulasi')">Simulasi</button>
+            <button class="tab-btn" onclick="switchTab('latihan')">Latihan</button>
+            <button class="tab-btn" onclick="switchTab('kuis')">Kuis</button>
+        </div>
+
+        <!-- Section: Simulasi -->
+        <div id="simulasi" class="content-section active">
+            <!-- TEORI CARD -->
+            <div class="card" style="margin-bottom: 30px;">
+                <div class="card-header">
+                    <h2>📚 Konsep Dasar</h2>
+                </div>
+                
+                <div style="display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-start;">
+                    <!-- Kolom Kiri -->
+                    <div style="flex: 1.5; min-width: 300px;">
+                        <p style="margin-bottom:20px;">
+                            Lingkaran adalah himpunan titik yang berjarak sama dari satu titik pusat. Jaraknya disebut <strong>Jari-jari (r)</strong>.
+                        </p>
+                        
+                        <div class="teori-box">
+                            <h3 style="font-size:2rem; font-weight:bold; margin-bottom:5px; font-family:'Outfit';">(x - a)² + (y - b)² = r²</h3>
+                            <span style="background:var(--pop-yellow); padding:2px 8px; border:2px solid black; font-weight:bold;">Rumus Baku</span>
+                        </div>
+
+                        <!-- Bentuk Umum -->
+                        <div style="margin-top:20px;">
+                            <h4 style="color:var(--pop-purple); margin-bottom:5px; font-family:'Outfit'; font-weight:900;">BENTUK UMUM:</h4>
+                            <div style="font-family:monospace; font-size:1.3rem; background:#f3f4f6; padding:10px; display:inline-block; border-radius:8px; border:2px solid #000; box-shadow: 4px 4px 0 rgba(0,0,0,0.1);">
+                                x² + y² + Ax + By + C = 0
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kolom Kanan: Kartu Definisi -->
+                    <div style="flex: 1; min-width: 250px; display: flex; flex-direction: column; gap: 10px;">
+                        <div class="def-card">
+                            <div class="icon-badge" style="background:var(--pop-cyan);">XY</div>
+                            <span class="def-text">Titik Koordinat</span>
+                        </div>
+                        <div class="def-card">
+                            <div class="icon-badge" style="background:var(--pop-pink);">AB</div>
+                            <span class="def-text">Titik Pusat</span>
+                        </div>
+                        <div class="def-card">
+                            <div class="icon-badge" style="background:var(--pop-yellow);">R</div>
+                            <span class="def-text">Jari-jari</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-sim">
+                <!-- Controls Panel -->
+                <div class="card control-panel">
+                    <div class="card-header">
+                        <h2>✏️ Input Data</h2>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Pusat Sumbu X (a)</label>
+                        <div class="input-wrapper">
+                            <span>a=</span>
+                            <input type="number" id="inputA" value="2" oninput="updateGraph()" placeholder="0">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Pusat Sumbu Y (b)</label>
+                        <div class="input-wrapper">
+                            <span>b=</span>
+                            <input type="number" id="inputB" value="-3" oninput="updateGraph()" placeholder="0">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Jari-jari (r)</label>
+                        <div class="input-wrapper">
+                            <span style="background:var(--pop-yellow);">r=</span>
+                            <input type="number" id="inputR" value="4" min="0" step="0.5" oninput="updateGraph()" placeholder="1">
+                        </div>
+                    </div>
+
+                    <div class="input-group zoom-control">
+                        <label style="display:flex; justify-content:space-between; margin-bottom:0;">
+                            <span>🔍 Zoom</span>
+                            <span id="zoomValue" style="color:var(--pop-purple); font-weight:bold;">100%</span>
+                        </label>
+                        <input type="range" id="zoomSlider" min="10" max="60" value="25" oninput="updateGraph()">
+                    </div>
+
+                    <div class="result-container">
+                        <div class="result-box">
+                            <span class="result-label" style="background:black; color:white; padding:2px 5px;">HASIL BAKU:</span>
+                            <div id="eqStandard" class="equation">...</div>
+                        </div>
+                        <div class="result-box">
+                            <span class="result-label" style="background:var(--pop-purple); color:white; padding:2px 5px;">HASIL UMUM:</span>
+                            <div id="eqGeneral" class="equation">...</div>
+                        </div>
+
+                        <div class="stats-grid" id="circleStats">
+                            <!-- Stats injected via JS -->
+                        </div>
+                    </div>
+                    
+                    <button class="btn-reset" onclick="resetValues()">HAPUS PAPAN</button>
+                </div>
+
+                <!-- Canvas Area -->
+                <div class="canvas-wrapper">
+                    <canvas id="graphCanvas" width="800" height="500"></canvas>
+                    <div class="canvas-legend">
+                        <div class="legend-item"><div class="dot" style="background:#ef4444;"></div> Titik Pusat</div>
+                        <div class="legend-item"><div class="dot" style="background:#22d3ee;"></div> Lingkaran</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Latihan Soal -->
+        <div id="latihan" class="content-section">
+            <div class="quiz-intro">
+                <h2>🎓 Bank Soal</h2>
+                <p>Cek contoh soal dulu sebelum mulai!</p>
+            </div>
+            
+            <!-- CONTOH SOAL SECTION -->
+            <h3 style="background:var(--pop-yellow); display:inline-block; padding:5px 15px; margin-bottom:20px; border:2px solid black; border-radius:10px; transform:rotate(-1deg);">📝 Contoh & Pembahasan</h3>
+            <div class="examples-container">
+                <div class="example-card">
+                    <h3>Contoh 1</h3>
+                    <div class="example-content">
+                        <strong>Soal:</strong> Pusat (2, 3), r = 5.<br>
+                        <div class="example-step">
+                            (x - 2)² + (y - 3)² = 5²<br>
+                            <strong>(x - 2)² + (y - 3)² = 25</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example-card" style="box-shadow: 8px 8px 0 var(--pop-pink);">
+                    <h3 style="background:var(--pop-pink)">Contoh 2</h3>
+                    <div class="example-content">
+                        <strong>Soal:</strong> Pusat (-1, 4), r = √7.<br>
+                        <div class="example-step">
+                            (x - (-1))² + (y - 4)² = (√7)²<br>
+                            <strong>(x + 1)² + (y - 4)² = 7</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="example-card" style="box-shadow: 8px 8px 0 var(--pop-cyan);">
+                    <h3 style="background:var(--pop-cyan)">Contoh 3</h3>
+                    <div class="example-content">
+                        <strong>Soal:</strong> Pusat (0, -2), r = 3.<br>
+                        <div class="example-step">
+                            (x - 0)² + (y - (-2))² = 3²<br>
+                            <strong>x² + (y + 2)² = 9</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Added Example 4 -->
+                <div class="example-card" style="box-shadow: 8px 8px 0 var(--pop-yellow);">
+                    <h3 style="background:var(--pop-yellow)">Contoh 4</h3>
+                    <div class="example-content">
+                        <strong>Soal:</strong> Pusat (5, -5), r = 6.<br>
+                        <div class="example-step">
+                            (x - 5)² + (y - (-5))² = 6²<br>
+                            <strong>(x - 5)² + (y + 5)² = 36</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Added Example 5 -->
+                <div class="example-card" style="box-shadow: 8px 8px 0 var(--pop-purple);">
+                    <h3 style="background:var(--pop-purple); color:white;">Contoh 5</h3>
+                    <div class="example-content">
+                        <strong>Soal:</strong> Pusat (-3, -4), r = 4.<br>
+                        <div class="example-step">
+                            (x - (-3))² + (y - (-4))² = 4²<br>
+                            <strong>(x + 3)² + (y + 4)² = 16</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDER LATIHAN -->
+            <h3 style="margin-bottom:15px; border-bottom:4px solid var(--pop-purple); display:inline-block;">✍️ Latihan (Geser)</h3>
+            <div class="slider-wrapper">
+                <button class="nav-btn prev" onclick="scrollSoal(-1)">&#10094;</button>
+                <div class="quiz-track" id="soalContainer"></div>
+                <button class="nav-btn next" onclick="scrollSoal(1)">&#10095;</button>
+            </div>
+        </div>
+
+        <!-- Section: Kuis (NEW) -->
+        <div id="kuis" class="content-section">
+            <div class="quiz-intro">
+                <h2>📝 Kuis Dadakan</h2>
+                <p>5 soal acak. Siap nggak?</p>
+            </div>
+
+            <div class="quiz-container-wrapper">
+                <div class="score-board" id="scoreBoard">
+                    <h3>NILAI KAMU:</h3>
+                    <div class="score-value" id="finalScore">0</div>
+                    <p id="scoreMsg">Belajar lagi ya!</p>
+                    <button class="btn-reset" onclick="resetQuiz()" style="width: auto; padding: 10px 40px; border-color:black; color:black; background:var(--pop-cyan);">ULANGI KUIS</button>
+                </div>
+
+                <div id="quizQuestionsContainer">
+                    <!-- Questions Rendered Here -->
+                </div>
+
+                <button class="btn-submit-quiz" onclick="checkQuiz()">PERIKSA JAWABAN</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PEMBAHASAN (POPUP) -->
+    <div id="modalOverlay" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💡 Pembahasan</h3>
+                <span class="close-btn" onclick="closeModal(null)">X</span>
+            </div>
+            <div id="modalBody" class="modal-body"></div>
+        </div>
+    </div>
+
+<script>
+    // --- 1. STATE & UTILS ---
+    const canvas = document.getElementById('graphCanvas');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width;
+    let height = canvas.height;
+    let centerX = width / 2;
+    let centerY = height / 2;
+
+    function switchTab(tabId) {
+        document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        
+        document.getElementById(tabId).classList.add('active');
+        
+        const btns = document.querySelectorAll('.tab-btn');
+        if(tabId === 'simulasi') btns[0].classList.add('active');
+        else if(tabId === 'latihan') btns[1].classList.add('active');
+        else if(tabId === 'kuis') btns[2].classList.add('active');
+    }
+
+    // --- 2. LOGIKA GRAFIK ---
+    function drawGrid(scale) {
+        ctx.clearRect(0, 0, width, height);
+        // Canvas background handled by CSS
+        
+        ctx.beginPath();
+        ctx.strokeStyle = '#e2e8f0'; // Grid Grey
+        ctx.lineWidth = 1;
+        for (let i = centerX; i < width; i += scale) { ctx.moveTo(i, 0); ctx.lineTo(i, height); }
+        for (let i = centerX; i > 0; i -= scale) { ctx.moveTo(i, 0); ctx.lineTo(i, height); }
+        for (let i = centerY; i < height; i += scale) { ctx.moveTo(0, i); ctx.lineTo(width, i); }
+        for (let i = centerY; i > 0; i -= scale) { ctx.moveTo(0, i); ctx.lineTo(width, i); }
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.strokeStyle = '#334155'; // Axis Black
+        ctx.lineWidth = 3;
+        ctx.moveTo(centerX, 0); ctx.lineTo(centerX, height);
+        ctx.moveTo(0, centerY); ctx.lineTo(width, centerY);
+        ctx.stroke();
+
+        ctx.fillStyle = "#334155";
+        ctx.font = "bold 16px 'Patrick Hand'";
+        ctx.fillText("0", centerX + 5, centerY + 15);
+        ctx.fillText("X", width - 20, centerY - 10);
+        ctx.fillText("Y", centerX + 10, 20);
+    }
+
+    function calculateStats(a, b, r) {
+        const luas = (Math.PI * r * r).toFixed(2);
+        const keliling = (2 * Math.PI * r).toFixed(2);
+        let xInt = "-";
+        const valX = (r*r) - (b*b);
+        if (valX >= 0) {
+            const x1 = (a + Math.sqrt(valX)).toFixed(1);
+            const x2 = (a - Math.sqrt(valX)).toFixed(1);
+            xInt = valX === 0 ? `(${x1}, 0)` : `(${x1}, 0) & (${x2}, 0)`;
+        }
+        let yInt = "-";
+        const valY = (r*r) - (a*a);
+        if (valY >= 0) {
+            const y1 = (b + Math.sqrt(valY)).toFixed(1);
+            const y2 = (b - Math.sqrt(valY)).toFixed(1);
+            yInt = valY === 0 ? `(0, ${y1})` : `(0, ${y1}) & (0, ${y2})`;
+        }
+        const container = document.getElementById('circleStats');
+        container.innerHTML = `
+            <div class="stat-item">Luas: ${luas}</div>
+            <div class="stat-item">Keliling: ${keliling}</div>
+            <div class="stat-item" style="grid-column: span 2;">
+                Potong Sumbu: X ${xInt} | Y ${yInt}
+            </div>
+        `;
+    }
+
+    function updateGraph() {
+        let a = parseFloat(document.getElementById('inputA').value) || 0;
+        let b = parseFloat(document.getElementById('inputB').value) || 0;
+        let r = parseFloat(document.getElementById('inputR').value);
+        let zoom = parseInt(document.getElementById('zoomSlider').value);
+
+        if (isNaN(r)) r = 1;
+        if (r < 0) r = Math.abs(r);
+
+        const zoomPercent = Math.round((zoom / 25) * 100);
+        document.getElementById('zoomValue').innerText = zoomPercent + "%";
+
+        const rSquared = parseFloat((r * r).toFixed(2));
+        const signA = a >= 0 ? `- ${a}` : `+ ${Math.abs(a)}`;
+        const signB = b >= 0 ? `- ${b}` : `+ ${Math.abs(b)}`;
+        let textA = a === 0 ? "x" : `(x ${signA})`;
+        let textB = b === 0 ? "y" : `(y ${signB})`;
+        if(a===0) textA = "x"; if(b===0) textB = "y";
+
+        document.getElementById('eqStandard').innerHTML = `${textA}² + ${textB}² = ${rSquared}`;
+
+        const bigA = -2 * a;
+        const bigB = -2 * b;
+        const bigC = (a*a) + (b*b) - (r*r);
+        const strA = bigA === 0 ? "" : (bigA > 0 ? ` + ${bigA}x` : ` - ${Math.abs(bigA)}x`);
+        const strB = bigB === 0 ? "" : (bigB > 0 ? ` + ${bigB}y` : ` - ${Math.abs(bigB)}y`);
+        const strC = bigC === 0 ? "" : (bigC > 0 ? ` + ${parseFloat(bigC.toFixed(2))}` : ` - ${Math.abs(parseFloat(bigC.toFixed(2)))}`);
+        
+        let generalEq = `x² + y²${strA}${strB}${strC} = 0`;
+        document.getElementById('eqGeneral').innerHTML = generalEq;
+
+        calculateStats(a, b, r);
+
+        const scale = zoom; 
+        drawGrid(scale);
+
+        const cvsA = centerX + (a * scale);
+        const cvsB = centerY - (b * scale); 
+        const cvsR = r * scale;
+
+        // Circle - Cyan Pop
+        ctx.beginPath();
+        ctx.strokeStyle = '#22d3ee'; 
+        ctx.lineWidth = 4;
+        ctx.arc(cvsA, cvsB, cvsR, 0, 2 * Math.PI);
+        ctx.stroke();
+        
+        ctx.fillStyle = 'rgba(34, 211, 238, 0.15)'; 
+        ctx.fill();
+
+        // Radius
+        ctx.beginPath();
+        ctx.strokeStyle = '#facc15'; 
+        ctx.lineWidth = 3;
+        ctx.setLineDash([5, 5]);
+        ctx.moveTo(cvsA, cvsB);
+        const angle = -Math.PI / 4; 
+        ctx.lineTo(cvsA + cvsR * Math.cos(angle), cvsB + cvsR * Math.sin(angle));
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Center
+        ctx.beginPath();
+        ctx.fillStyle = '#ef4444'; 
+        ctx.arc(cvsA, cvsB, 6, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        // Labels
+        ctx.fillStyle = '#334155';
+        ctx.font = "bold 16px 'Patrick Hand'";
+        ctx.fillText(`P(${a}, ${b})`, cvsA + 10, cvsB);
+        ctx.fillStyle = '#d97706';
+        ctx.fillText(`r=${r}`, cvsA + (cvsR/2), cvsB - (cvsR/2));
+    }
+
+    function resetValues() {
+        document.getElementById('inputA').value = 2;
+        document.getElementById('inputB').value = -3;
+        document.getElementById('inputR').value = 4;
+        document.getElementById('zoomSlider').value = 25;
+        updateGraph();
+    }
+
+    // --- 3. BANK SOAL (35 Items) ---
+    const soalList = [
+        { t: "Pusat (1, 2), r = 3", j: "(x - 1)² + (y - 2)² = 9" },
+        { t: "Pusat (-2, 3), r = 4", j: "(x + 2)² + (y - 3)² = 16" },
+        { t: "Pusat (2, 5), r = 2", j: "(x - 2)² + (y - 5)² = 4"},
+        { t: "Pusat (4, -1), r = 2", j: "(x - 4)² + (y + 1)² = 4" },
+        { t: "Pusat (-3, -2), r = 1", j: "(x + 3)² + (y + 2)² = 1" },
+        { t: "Pusat (2, 0), r = √2", j: "(x - 2)² + y² = 2" },
+        { t: "Pusat (1/2, 1), r = 2", j: "(x - 1/2)² + (y - 1)² = 4" },
+        { t: "Pusat (-1, -1/2), r = √5", j: "(x + 1)² + (y + 1/2)² = 5" },
+        { t: "Pusat (0, -3), r = 4", j: "x² + (y + 3)² = 16" },
+        { t: "Pusat (-5, 0), r = 6", j: "(x + 5)² + y² = 36" },
+        { t: "Pusat (3, 3), r = 7", j: "(x - 3)² + (y - 3)² = 49" },
+        { t: "Pusat (-4, 4), r = 8", j: "(x + 4)² + (y - 4)² = 64" },
+        { t: "Pusat (5, -2), r = 9", j: "(x - 5)² + (y + 2)² = 81" },
+        { t: "Pusat (-6, 1), r = 10", j: "(x + 6)² + (y - 1)² = 100" },
+        { t: "Pusat (7, -3), r = 11", j: "(x - 7)² + (y + 3)² = 121" },
+        { t: "Pusat (-8, 2), r = 12", j: "(x + 8)² + (y - 2)² = 144" },
+        { t: "Pusat (9, -4), r = 13", j: "(x - 9)² + (y + 4)² = 169" },
+        { t: "Pusat (-10, 3), r = 14", j: "(x + 10)² + (y - 3)² = 196" },
+        { t: "Pusat (11, -5), r = 15", j: "(x - 11)² + (y + 5)² = 225" },
+        { t: "Pusat (-12, 4), r = 16", j: "(x + 12)² + (y - 4)² = 256" },
+        { t: "Pusat (1, 1), r = √3", j: "(x - 1)² + (y - 1)² = 3" },
+        { t: "Pusat (-2, -2), r = √6", j: "(x + 2)² + (y + 2)² = 6" },
+        { t: "Pusat (3, -1), r = √8", j: "(x - 3)² + (y + 1)² = 8" },
+        { t: "Pusat (-4, 2), r = √10", j: "(x + 4)² + (y - 2)² = 10" },
+        { t: "Pusat (5, 0), r = √12", j: "(x - 5)² + y² = 12" },
+        { t: "Pusat (-6, -3), r = √14", j: "(x + 6)² + (y + 3)² = 14" },
+        { t: "Pusat (7, 1), r = √15", j: "(x - 7)² + (y - 1)² = 15" },
+        { t: "Pusat (-8, -4), r = √17", j: "(x + 8)² + (y + 4)² = 17" },
+        { t: "Pusat (9, 2), r = √18", j: "(x - 9)² + (y - 2)² = 18" },
+        { t: "Pusat (-10, -5), r = √20", j: "(x + 10)² + (y + 5)² = 20" },
+        { t: "Pusat (0.5, 1.5), r = 2.5", j: "(x - 0.5)² + (y - 1.5)² = 6.25" },
+        { t: "Pusat (-1.5, 2.5), r = 3.5", j: "(x + 1.5)² + (y - 2.5)² = 12.25" },
+        { t: "Pusat (2.5, -0.5), r = 4.5", j: "(x - 2.5)² + (y + 0.5)² = 20.25" },
+        { t: "Pusat (-3.5, 1.5), r = 5.5", j: "(x + 3.5)² + (y - 1.5)² = 30.25" },
+        { t: "Pusat (1.5, -2.5), r = 6.5", j: "(x - 1.5)² + (y + 2.5)² = 42.25" }
+    ];
+
+    function loadSoal() {
+        const container = document.getElementById('soalContainer');
+        container.innerHTML = "";
+        
+        soalList.forEach((item, idx) => {
+            const card = document.createElement('div');
+            card.className = "quiz-card";
+            card.innerHTML = `
+                <div>
+                    <span class="question-badge">Soal ${idx + 1}</span>
+                    <div class="question-text">Pusat & Jari-jari:<br><strong style="color:var(--pop-pink)">${item.t}</strong></div>
+                </div>
+                <div>
+                    <button class="btn-toggle-answer" onclick="openModal(${idx})">
+                        Lihat Jawaban
+                    </button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function openModal(idx) {
+        const item = soalList[idx];
+        const modal = document.getElementById('modalOverlay');
+        const body = document.getElementById('modalBody');
+        body.innerHTML = `
+            <div style="text-align:center;">
+                <p style="margin-bottom:10px; font-weight:bold; color:var(--text-dim);">Soal: ${item.t}</p>
+                <div style="background:rgba(255,255,255,0.05); padding:20px; border:1px solid var(--neon-cyan); font-weight:bold; color:var(--neon-cyan);">
+                    ${item.j}
+                </div>
+            </div>
+        `;
+        modal.style.display = 'flex';
+    }
+
+    function closeModal(e) {
+        if (!e || e.target.id === 'modalOverlay' || e.target.closest('.close-btn')) {
+            document.getElementById('modalOverlay').style.display = 'none';
+        }
+    }
+
+    function scrollSoal(direction) {
+        const container = document.getElementById('soalContainer');
+        container.scrollBy({ left: direction * 330, behavior: 'smooth' });
+    }
+
+    // --- 4. KUIS INTERAKTIF RANDOM ---
+    let currentQuizQuestions = [];
+
+    function shuffle(array) {
+        let currentIndex = array.length, randomIndex;
+        while (currentIndex != 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+        return array;
+    }
+
+    function generateQuiz() {
+        const shuffledSoal = shuffle([...soalList]); 
+        const selectedSoal = shuffledSoal.slice(0, 5);
+
+        currentQuizQuestions = selectedSoal.map((item, index) => {
+            const correctAnswer = item.j;
+            const distractors = shuffle(soalList.filter(s => s.j !== correctAnswer)).slice(0, 3).map(s => s.j);
+            const options = shuffle([correctAnswer, ...distractors]);
+            const correctIndex = options.indexOf(correctAnswer);
+
+            return {
+                q: `${index + 1}. Tentukan persamaan jika: <span style="color:var(--pop-purple)">${item.t}</span>`,
+                options: options,
+                correct: correctIndex
+            };
+        });
+
+        renderQuiz();
+    }
+
+    function renderQuiz() {
+        const container = document.getElementById('quizQuestionsContainer');
+        container.innerHTML = '';
+
+        currentQuizQuestions.forEach((item, index) => {
+            let optionsHtml = '';
+            item.options.forEach((opt, optIndex) => {
+                optionsHtml += `
+                    <label class="option-label" id="q${index}_opt${optIndex}">
+                        <input type="radio" name="q${index}" value="${optIndex}">
+                        ${opt}
+                    </label>
+                `;
+            });
+
+            const questionCard = `
+                <div class="quiz-item-card" id="card_q${index}">
+                    <div class="quiz-q-text">${item.q}</div>
+                    <div class="quiz-options-list">
+                        ${optionsHtml}
+                    </div>
+                </div>
+            `;
+            container.innerHTML += questionCard;
+        });
+    }
+
+    function checkQuiz() {
+        let score = 0;
+        currentQuizQuestions.forEach((item, index) => {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`);
+            const card = document.getElementById(`card_q${index}`);
+            card.classList.remove('correct', 'wrong');
+            document.querySelectorAll(`input[name="q${index}"]`).forEach(inp => {
+                inp.parentElement.classList.remove('correct-answer', 'wrong-answer');
+            });
+            document.getElementById(`q${index}_opt${item.correct}`).classList.add('correct-answer');
+
+            if (selected) {
+                if (parseInt(selected.value) === item.correct) {
+                    score += 20;
+                    card.classList.add('correct');
+                } else {
+                    card.classList.add('wrong');
+                    selected.parentElement.classList.add('wrong-answer');
+                }
+            } else {
+                card.classList.add('wrong');
+            }
+        });
+
+        const scoreBoard = document.getElementById('scoreBoard');
+        const scoreVal = document.getElementById('finalScore');
+        const scoreMsg = document.getElementById('scoreMsg');
+
+        scoreBoard.style.display = 'block';
+        scoreVal.innerText = `${score}`;
+        
+        if(score === 100) scoreMsg.innerText = "Wow! 100! Kamu Jenius!";
+        else if(score >= 60) scoreMsg.innerText = "Not Bad, tingkatkan lagi!";
+        else scoreMsg.innerText = "Yah, coba lagi yuk!";
+
+        document.getElementById('kuis').scrollIntoView({behavior: 'smooth'});
+    }
+
+    function resetQuiz() {
+        document.getElementById('scoreBoard').style.display = 'none';
+        generateQuiz();
+        document.getElementById('quizQuestionsContainer').scrollIntoView({behavior: 'smooth'});
+    }
+
+    // --- INIT ---
+    window.onload = function() {
+        updateGraph();
+        loadSoal();
+        generateQuiz();
+        window.addEventListener('resize', () => {
+            const containerWidth = document.querySelector('.canvas-wrapper').clientWidth;
+            if(containerWidth > 200) {
+                canvas.width = containerWidth - 20;
+                width = canvas.width;
+                centerX = width / 2;
+                updateGraph();
+            }
+        });
+    };
+</script>
+
+</body>
+</html>
